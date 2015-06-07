@@ -37,8 +37,10 @@ stop(ConnId) ->
   gen_server:cast(ConnId, stop).
 
 %% @hidden
--spec start_link(atom(), apns:connection()) ->
+-spec start_link(atom() | tuple(), apns:connection()) ->
   {ok, pid()} | {error, {already_started, pid()}}.
+start_link({via, _, _} = Name, Connection) ->
+  gen_server:start_link(Name, ?MODULE, Connection, []);
 start_link(Name, Connection) ->
   gen_server:start_link({local, Name}, ?MODULE, Connection, []).
 %% @hidden

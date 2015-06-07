@@ -79,8 +79,10 @@ stop([]) -> ok.
 %% @doc Opens an unnamed connection using the given feedback or error function
 %%      or using the given connection() parameters
 %%      or the name and default configuration if a name is given
--spec connect(atom() | string() | fun((string()) -> _) | connection()) ->
+-spec connect(atom() | tuple()| string() | fun((string()) -> _) | connection()) ->
   {ok, pid()} | {error, {already_started, pid()}} | {error, Reason::term()}.
+connect({via, _, _} = Name) ->
+  connect(Name, default_connection());
 connect(Name) when is_atom(Name) ->
   connect(Name, default_connection());
 connect(Connection) when is_record(Connection, apns_connection) ->
